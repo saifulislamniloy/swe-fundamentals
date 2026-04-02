@@ -73,3 +73,22 @@ JDK
 ```
 
 > **Key takeaway:** Each outer layer is a strict superset. You can't have the JDK without having the JRE, and you can't have the JRE without having the JVM.
+
+---
+
+## 📦 Size Comparison Across LTS Versions (Linux x64, Temurin/OpenJDK)
+
+| Version | JDK (installed) | JRE (installed) | jlink minimal runtime | Typical server deploy (JRE + JAR) |
+|---------|----------------|-----------------|------------------------|-----------------------------------|
+| Java 8  | ~300 MB        | ~160–185 MB (Oracle) | N/A (pre-modules)  | ~160–185 MB + JAR size            |
+| Java 11 | ~300 MB        | ~140–160 MB (Temurin JRE) | ~50–95 MB     | ~140–160 MB + JAR size            |
+| Java 17 | ~350 MB        | ~150–170 MB (Temurin JRE) | ~50–95 MB     | ~150–170 MB + JAR size            |
+| Java 21 | ~400 MB        | ~160–200 MB (Temurin JRE) | ~50–95 MB     | ~160–200 MB + JAR size            |
+
+**Notes:**
+- **Java 8** — Oracle shipped a standalone JRE installer. Installed size on Linux x64 is ~160–185 MB.
+- **Java 11+** — Oracle stopped shipping a separate JRE, but **Adoptium/Temurin does provide JRE builds** for Java 11, 17, and 21. These are the right choice for server deployments where you don't need compiler tools.
+- **Server deployment tip:** Ship the Temurin JRE (~150–200 MB) + your `.jar` instead of the full JDK (~300–400 MB). That alone saves ~150 MB per server instance.
+- **Smallest footprint:** Use `jlink` to build a custom runtime with only the modules your app needs — can get down to ~50–95 MB (or as low as ~10–24 MB for simple apps), then ship that + your JAR.
+- JDK size grows across versions mainly because of new standard library modules, tooling additions, and debug symbols.
+- Sizes vary by OS and distribution (Windows installers tend to be slightly larger than Linux tarballs).
