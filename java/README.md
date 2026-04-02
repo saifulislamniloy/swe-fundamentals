@@ -1,4 +1,4 @@
-# swe-fundamentals
+# JAVA 
 
 ## JDK, JRE & JVM — A Layer-by-Layer Breakdown
 
